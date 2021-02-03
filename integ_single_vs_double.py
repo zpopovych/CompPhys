@@ -65,7 +65,7 @@ def simpson_d(A,B,N):
 A = 0.0
 B = 1.0
 
-maxpoints = 10000000
+maxpoints = 1e7
 
 Nvalues = []    #empty lists
 traperror = []
@@ -90,17 +90,17 @@ while N<maxpoints:    # loop over number of points
     if N%2 == 0:
         N=N+1    # make sure N is odd
         
-loglog(Nvalues,traperror,label="Trapezoid error (single precision)")   # log log plot of error in trapezoid method
-loglog(Nvalues,simpson_error,label="Simpson error (single precision)")   # log log plot of error in simpson method
+loglog(Nvalues,traperror,label="Trapezoid (single )")   # log log plot of error in trapezoid method
+loglog(Nvalues,simpson_error,label="Simpson (single)")   # log log plot of error in simpson method
 
-loglog(Nvalues,traperror_d,label="Trapezoid error (double precision)")   # log log plot of error in trapezoid method
-loglog(Nvalues,simpson_error_d,label="Simpson error (double precision)")   # log log plot of error in simpson method
+loglog(Nvalues,traperror_d,label="Trapezoid (double)")   # log log plot of error in trapezoid method
+loglog(Nvalues,simpson_error_d,label="Simpson (double)")   # log log plot of error in simpson method
 
 loglog(Nvalues,0.1*array(Nvalues)**(-2.0),label="0.1/N^2", alpha=.5)   # plot 0.1/N^2 for comparison
 loglog(Nvalues,0.07*array(Nvalues)**(-5.0),label="0.07/N^5", alpha=.5)   # plot 0.1/N^5 for comparison
 loglog(Nvalues,0.005*array(Nvalues)**(-4.0),label="0.005/N^4", alpha=.5)   # plot 0.1/N^5 for comparison
 
-ylim([1e-15,1])   # set range of y values
+ylim([1e-21,1])   # set range of y values
 title('Numerical integration error for different methods \n (single vs double precession)')
 xlabel('Number of points')
 ylabel('Total error')
