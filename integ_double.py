@@ -23,7 +23,7 @@ def trapezoid(A,B,N):   #integrate from A to B using N points
     sum = (func(A)+func(B))/2               # (1st + last)/2
     for i in range(1, N-1):        # i goes from 1 to (N-1)-1
        sum += func(A+i*h)
-       sum=float32(sum)            # to simulate single-precision (32 bit) calculation
+       #sum=float32(sum)            # to simulate single-precision (32 bit) calculation
     return h*sum  
 
 def simpson(A,B,N):
@@ -34,16 +34,16 @@ def simpson(A,B,N):
     sum = (func(A)+func(B))/3               # (1st + last)/3
     for i in range(1, N-1,2):        # i loops over odd integers  from 1 to (N-1)-1
        sum += 4/3*func(A+i*h)
-       sum=float32(sum)
+       #sum=float32(sum)
     for i in range(2, N-1,2):        # i loops over even integers starting with 2
        sum += 2/3*func(A+i*h)
-       sum=float32(sum)
+       #sum=float32(sum)
     return h*sum  
               
 A = 0.0
 B = 1.0
 
-maxpoints = 1000000
+maxpoints = 10000000
 
 Nvalues = []    #empty lists
 traperror = []
@@ -65,11 +65,12 @@ while N<maxpoints:    # loop over number of points
 loglog(Nvalues,traperror,label="Trapezoid error")   # log log plot of error in trapezoid method
 loglog(Nvalues,simpson_error,label="Simpson error")   # log log plot of error in simpson method
 loglog(Nvalues,0.1*array(Nvalues)**(-2.0),label="0.1/N^2", alpha=.5)   # plot 0.1/N^2 for comparison
-loglog(Nvalues,0.07*array(Nvalues)**(-5.0),label="0.07/N^5", alpha=.5)   # plot 0.1/N^5 for comparison
-ylim([1e-8,1])   # set range of y values
-title('Numerical integration error for different methods \n (single precession)')
+loglog(Nvalues,0.005*array(Nvalues)**(-4.0),label="0.005/N^4", alpha=.5)   # plot 0.1/N^5 for comparison
+
+ylim([1e-21,1])   # set range of y values
+title('Numerical integration error for different methods \n (double precision)')
 xlabel('Number of points')
 ylabel('Total error')
 legend(loc="upper right")
-savefig('Integation_'+str(maxpoints)+"_points.png")
+savefig('Integation_'+str(maxpoints)+"_points_double.png")
 show()    #show the graph
