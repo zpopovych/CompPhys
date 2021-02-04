@@ -61,7 +61,7 @@ while N<maxpoints:    # loop over number of points
     Nvalues.append(N)
     traperror.append(abs(trapezoid(A,B,N)-exact)/exact) # Error in trapezoid method
     simpson_error.append(abs(simpson(A, B, N) - exact) / exact)  # Error in simpson method
-    romberg_error.append(abs(romberg(A, B, N) - exact) / exact)  # Error in simpson method
+    romberg_error.append(abs(romberg(A, B, N) - exact) / exact)  # Error in romberg method
 
     N=int(N*1.1)+1    # N grows roughly by 1.1 factor each time
     if N%2 == 0:
@@ -69,7 +69,7 @@ while N<maxpoints:    # loop over number of points
         
 loglog(Nvalues,traperror,label="Trapezoid error")   # log log plot of error in trapezoid method
 loglog(Nvalues,simpson_error,label="Simpson error")   # log log plot of error in simpson method
-loglog(Nvalues,romberg_error,label="Romberg of Simpson error")   # log log plot of error in simpson method
+loglog(Nvalues,romberg_error,label="Romberg of Simpson error")   # log log plot of error in romberg method
 
 loglog(Nvalues,0.1*array(Nvalues)**(-2.0),label="0.1/N^2", alpha=.5)   # plot 0.1/N^2 for comparison
 loglog(Nvalues,0.005*array(Nvalues)**(-4.0),label="0.005/N^4", alpha=.5)   # plot 0.1/N^5 for comparison
