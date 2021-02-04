@@ -66,6 +66,12 @@ def simpsony(A,B,N):
        #sum=float32(sum)
     return h*sum
 
+def romberg(A,B,N):
+    return (16*simpson(A,B,2*N-1) - simpson(A,B,N))/15
+
+def rombergy(A,B,N):
+    return (16*simpsony(A,B,2*N-1) - simpsony(A,B,N))/15
+
 #num * 2 for num in lst
 
 xpoints = np.arange(0.001,1,0.001)
@@ -86,16 +92,24 @@ show()
 i_simpsonx = simpson(1.0e-15, 1.0, 1000001)
 #i_trapezoidx = trapezoid(1.0e-15, 1.0, 10000001)
 
+i_rombergx = romberg(1.0e-15, 1.0, 1000001)
+
 i_simpsony = simpsony(1.0e-15, 1.0, 1000001)
 #i_trapezoidy = trapezoidy(1.0e-15, 1.0, 10000001)
+
+i_rombergy = rombergy(1.0e-15, 1.0, 1000001)
 
 print('Simpson method for x:', i_simpsonx)
 print('Simpson method for y:', i_simpsony)
 
+print('Romberg aproximation for Simpson method for x:', i_rombergx)
+print('Romberg aproximation for Simpson method for y:', i_rombergy)
+
 i_mathematica = 0.0329952
 
 print(' Mathematica gives:', i_mathematica)
-print(' Estimated error:', abs(i_simpsony-i_mathematica))
+print(' Estimated error of Simpson:', abs(i_simpsony-i_mathematica))
+print(' Estimated error of Romberg aproximation for Simpson method:', abs(i_rombergy-i_mathematica))
 
 #print('Trapezoid method for x:', i_trapezoidx )
 #print('Trapezoid method for y:', i_trapezoidy )
