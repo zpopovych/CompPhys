@@ -88,7 +88,7 @@ while N<maxpoints:    # loop over number of points
 
     N=int(N*1.1)+1    # N grows roughly by 1.1 factor each time
     if N%2 == 0:
-        N=N+1    # make sure N is odd
+        N=N+1    # make sure N is od)
         
 loglog(Nvalues,traperror,label="Trapezoid (single )")   # log log plot of error in trapezoid method
 loglog(Nvalues,simpson_error,label="Simpson (single)")   # log log plot of error in simpson method
