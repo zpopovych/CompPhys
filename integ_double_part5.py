@@ -19,7 +19,7 @@ def func(x):          # function to be integrated
     return cos(5*x + x*x)/x**(3/2)
 
 def funcy(y):  # function to be integrated
-    return cos(y**(-4)+5*y**(-2))
+    return cos(y**(5)+5*y**(5/2))
 
 
 def trapezoid(A,B,N):   #integrate from A to B using N points
@@ -74,30 +74,30 @@ def rombergy(A,B,N):
 
 #num * 2 for num in lst
 
-xpoints = np.arange(0.001,1,0.001)
-fxpoints = [func(x) for x in np.arange(0.001,1,0.001)]
+xpoints = np.arange(0.0,1.0,0.001)
+fxpoints = [func(x) for x in np.arange(0.0,1.0,0.001)]
 
 plot(xpoints, fxpoints)
 title('Function '+r'$ cos(5x + x^2)/x^{3/2}$')
 savefig('part5_funcx.png')
 show()
 
-ypoints = np.arange(0.001,1,0.001)
-fypoints = [funcy(x) for x in np.arange(0.001,1,0.001)]
+ypoints = np.arange(0.0,1.0,0.001)
+fypoints = [funcy(x) for x in np.arange(0.0,1.0,0.001)]
 plot(ypoints, fypoints)
-title('Function '+r'$ cos(y^{-4}+5y^{-2})$')
+title('Function '+r'$ cos(y^{5}+5y^{5/2})$')
 savefig('part5_funcy.png')
 show()
 
-i_simpsonx = simpson(1.0e-15, 1.0, 1000001)
+i_simpsonx = simpson(0, 1.0, 2001)
 #i_trapezoidx = trapezoid(1.0e-15, 1.0, 10000001)
 
-i_rombergx = romberg(1.0e-15, 1.0, 1000001)
+i_rombergx = romberg(0, 1.0, 101)
 
-i_simpsony = simpsony(1.0e-15, 1.0, 1000001)
+i_simpsony = 5/2 * simpsony(0, 1.0, 2001)
 #i_trapezoidy = trapezoidy(1.0e-15, 1.0, 10000001)
 
-i_rombergy = rombergy(1.0e-15, 1.0, 1000001)
+i_rombergy = 5/2 * rombergy(0, 1.0, 101)
 
 print('Simpson method for x:', i_simpsonx)
 print('Simpson method for y:', i_simpsony)
@@ -105,7 +105,7 @@ print('Simpson method for y:', i_simpsony)
 print('Romberg aproximation for Simpson method for x:', i_rombergx)
 print('Romberg aproximation for Simpson method for y:', i_rombergy)
 
-i_mathematica = 0.0329952
+i_mathematica = 5/2 * 0.359898 # 0.899745
 
 print(' Mathematica gives:', i_mathematica)
 print(' Estimated error of Simpson:', abs(i_simpsony-i_mathematica))
