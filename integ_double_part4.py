@@ -46,7 +46,7 @@ def romberg(A,B,N):
 A = 0.0
 B = 1.0
 
-maxpoints = 10000000
+maxpoints = 1e7
 
 Nvalues = []    #empty lists
 traperror = []
@@ -72,7 +72,8 @@ loglog(Nvalues,simpson_error,label="Simpson error")   # log log plot of error in
 loglog(Nvalues,romberg_error,label="Romberg of Simpson error")   # log log plot of error in simpson method
 
 loglog(Nvalues,0.1*array(Nvalues)**(-2.0),label="0.1/N^2", alpha=.5)   # plot 0.1/N^2 for comparison
-loglog(Nvalues,0.005*array(Nvalues)**(-4.0),label="0.005/N^4", alpha=.5)   # plot 0.1/N^5 for comparison
+loglog(Nvalues,0.005*array(Nvalues)**(-4.0),label="0.005/N^4", alpha=.5)   # plot 0.1/N^4 for comparison
+loglog(Nvalues,5.0e-5*array(Nvalues)**(-6.0),label="5e-5/N^6", alpha=.5)   # plot 0.1/N^6 for comparison
 
 ylim([1e-21,1])   # set range of y values
 title('Numerical integration error for different methods \n (double precision)')
