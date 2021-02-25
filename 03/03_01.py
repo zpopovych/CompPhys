@@ -44,8 +44,9 @@ print('a = ', inter, '+/-', sqrt(sxx/delta))
 print('b = ', slope, '+/-', sqrt(ss/delta))
 print('correlation =',-sx/sqrt(sxx*ss))
 
-print('tau = ', -slope, '+/-', sqrt(ss/delta))
-
+print('tau = ' + str(-1/slope)+'[ns]')
+print('[ns] = 1E-9 [s]')
+print('tau = ' + str(round(-1/slope/10,2))+' E-8 [s]')
 
 
 # red line is the fit, red dots the fits at y[i]
