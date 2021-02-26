@@ -23,6 +23,7 @@ inputfile.close()
         # input has the form: x0 y0 sig0
         #                     x1 y1 sig1
         #                     ...
+# print(r)
 
 m = 0
 for line in r:
@@ -30,22 +31,26 @@ for line in r:
     s = line.split() # split line and split into list of items(assume items separated by spaces)
     xin[m] = s[0] # first number in each line is the x value
     yin[m] = s[1]
-    sig[m] = s[2]
+    sig[m] = sqrt(yin[m]) # was sig[m] = s[2]
     m+=1         # m is total number of input data points
                  # will be stored in xin[0]..xin[n-1],yin[0]..yin[n-1]
 
 popt,pcov = curve_fit(func, xin[0:m], yin[0:m], p0=[1,2,0], sigma=sig[0:m])
 
-print("best fit parameters a,b,c =",popt)
+print("best fit parameters a,b,c =", popt)
 
 print("covariance matrix for the parameters a,b,c =\n",pcov)
 
 print("uncertainties in parameters =",sqrt(diag(pcov)))
 
-xvalues = linspace(0,7,100)
-yvalues = func(xvalues,popt[0],popt[1],popt[2])
+xvalues = linspace(0,200,1000)
+yvalues = func(xvalues, popt[0], popt[1], popt[2])
 
-errorbar(xin[0:m],yin[0:m],sig[0:m],fmt="o",label="input data")
+errorbar(xin[0:m],yin[0:m],sig[0:m],fmt="o",label="experiment data")
 plot(xvalues,yvalues,"b-",label="quadratic fit")
+title('Nonlinear Fit of Neutron Scattering Experimental Data \n'+r' with function  $y = A / (D + B {(x-C)}^2 )$')
+ylabel( 'Cross section, '+ r'$g(E_i)$ [mb]')
+xlabel( 'Energy of neutron, $E$ [MeV]')
 legend(loc="upper right")
+savefig('03_03_quadratic_fit.png')
 show()
