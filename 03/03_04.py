@@ -43,9 +43,9 @@ popt,pcov = curve_fit(func, xin[0:m], yin[0:m], p0=init_abcd, sigma=sig[0:m])
 
 print("best fit parameters a,b,c =", popt)
 
-print("covariance matrix for the parameters a,b,c =\n",pcov)
+print("covariance matrix for the parameters a,b,c,d =\n",pcov)
 
-print("uncertainties in parameters =",sqrt(diag(pcov)))
+print("uncertainties in parameters =", sqrt(abs(diag(pcov))))
 
 xvalues = linspace(0,200,1000)
 yvalues = func(xvalues, popt[0], popt[1], popt[2], popt[3])
