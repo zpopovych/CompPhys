@@ -11,7 +11,6 @@ from pylab  import*
 x = range(5,120,10)    # time from 5 to 115 in steps of 10 (12 points) - consider \delta t = 10
 Nd = len(x)   # number of data points
 y = log([32,17,21,7,8,6,5,2,2,0.1,4,1])   # log of number of counts - consider it \delta N
-sig = [1] * 12   # error bars all set to 1
 
 print("Number of data points:", Nd)
 
