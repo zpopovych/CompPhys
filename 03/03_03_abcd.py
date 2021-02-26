@@ -27,7 +27,7 @@ inputfile.close()
 # print(r)
 
 m = 0
-k = 2.8 # manually adjusted
+k = 1.13  # manually adjusted
 for line in r:
     print(line)
     s = line.split() # split line and split into list of items(assume items separated by spaces)
