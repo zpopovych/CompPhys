@@ -35,6 +35,8 @@ for line in r:
     m+=1         # m is total number of input data points
                  # will be stored in xin[0]..xin[n-1],yin[0]..yin[n-1]
 
+
+
 popt,pcov = curve_fit(func, xin[0:m], yin[0:m], p0=[1,2,0], sigma=sig[0:m])
 
 print("best fit parameters a,b,c =", popt)
@@ -46,11 +48,19 @@ print("uncertainties in parameters =",sqrt(diag(pcov)))
 xvalues = linspace(0,200,1000)
 yvalues = func(xvalues, popt[0], popt[1], popt[2])
 
+chi2 = 0
+yfit = func(xin, popt[0], popt[1], popt[2])
+for i in range(0, m):
+    sig2 = sig[i] * sig[i]
+    chi2 += ((yin[i] - yfit[i]) ** 2) / sig2
+
+print('chi^2 = ', chi2)
+
 errorbar(xin[0:m],yin[0:m],sig[0:m],fmt="o",label="experiment data")
 plot(xvalues,yvalues,"b-",label="quadratic fit")
 title('Nonlinear Fit of Neutron Scattering Experimental Data \n'+r' with function  $y = A + B x + C x^2$')
 ylabel( 'Cross section, '+ r'$g(E_i)$ [mb]')
-xlabel( 'Energy of neutron, $E$ [MeV]')
+xlabel( 'Energy of neutron, $E$ [MeV] '+ r'   $\chi^2 \approx $' + str(round(chi2,2)))
 legend(loc="upper right")
 savefig('03_03_quadratic_abc.png')
 show()

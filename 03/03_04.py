@@ -59,10 +59,10 @@ for i in range(0, m):
 print('chi^2 = ', chi2)
 
 errorbar(xin[0:m],yin[0:m],sig[0:m],fmt="o",label="experiment data")
-plot(xvalues,yvalues,"b-",label=r'$y = A / (D + B {(x-C)}^2 )$ fit')
+plot(xvalues,yvalues,"b-",label=r'$ g = A / (D + B {(E-C)}^2 )$ fit')
 title('Nonlinear Fit of Neutron Scattering Experimental Data \n'+r' with function  $y = A / (D + B {(x-C)}^2 )$')
 ylabel( 'Cross section, '+ r'$g(E_i)$ [mb]')
 xlabel( 'Energy of neutron, $E$ [MeV]   ' + r' $\chi^2 \approx $' + str(round(chi2,2)))
 legend(loc="upper right")
-savefig('03_04_abcd.png')
+savefig('03_04.png')
 show()
