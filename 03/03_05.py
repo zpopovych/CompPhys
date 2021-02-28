@@ -8,8 +8,8 @@
 from pylab import *
 from scipy.optimize import curve_fit   # chi squared fitting
 
-def func(x,a,b,c):   # define functional form
-    return a/(1+b*(x-c)**2)
+def func(x,a,b,c,d):   # define functional form
+    return a/(d+b*(x-c)**2)
     # return a + b*x + c*x*x
 
 NMAX = 1000  # max number of input points
@@ -27,7 +27,7 @@ inputfile.close()
 # print(r)
 
 m = 0
-k = 1.13 # manually adjusted
+k = 1.13  # manually adjusted
 for line in r:
     print(line)
     s = line.split() # split line and split into list of items(assume items separated by spaces)
@@ -37,24 +37,32 @@ for line in r:
     m+=1         # m is total number of input data points
                  # will be stored in xin[0]..xin[n-1],yin[0]..yin[n-1]
 
-init_abc = [80,1,75]
+init_abcd = [80,1,75,1]
 
-popt,pcov = curve_fit(func, xin[0:m], yin[0:m], p0=init_abc, sigma=sig[0:m])
+popt,pcov = curve_fit(func, xin[0:m], yin[0:m], p0=init_abcd, sigma=sig[0:m])
 
-print("best fit parameters a,b,c =", popt)
+print("best fit parameters a,b,c,d =", popt)
 
-print("covariance matrix for the parameters a,b,c =\n",pcov)
+print("covariance matrix for the parameters a,b,c,d =\n",pcov)
 
-print("uncertainties in parameters =", sqrt(abs(diag(pcov))))
+print("uncertainties in parameters =",sqrt(abs(diag(pcov))))
 
 xvalues = linspace(0,200,1000)
-yvalues = func(xvalues, popt[0], popt[1], popt[2])
+yvalues = func(xvalues, popt[0], popt[1], popt[2], popt[3])
+
+chi2=0
+yfit = func(xin, popt[0], popt[1], popt[2], popt[3])
+for i in range(0, m):
+    sig2 = sig[i] * sig[i]
+    chi2 += ((yin[i] - yfit[i])**2)/sig2
+
+print('chi^2 = ', chi2)
 
 errorbar(xin[0:m],yin[0:m],sig[0:m],fmt="o",label="experiment data")
-plot(xvalues,yvalues,"b-",label=r'$ g = A / (1 + B {(E-C)}^2 )$ fit')
-title('Nonlinear Fit of Neutron Scattering Experimental Data \n'+r' with function  $y = A / (1 + B {(x-C)}^2 )$')
+plot(xvalues,yvalues,"b-",label=r'$ g = A / (D + B {(E-C)}^2 )$ fit')
+title('Nonlinear Fit of Neutron Scattering Experimental Data \n'+r' with function  $y = A / (D + B {(x-C)}^2 )$')
 ylabel( 'Cross section, '+ r'$g(E_i)$ [mb]')
-xlabel( 'Energy of neutron, $E$ [MeV]   ')
+xlabel( 'Energy of neutron, $E$ [MeV]   ' + r' $\chi^2 \approx $' + str(round(chi2,2)))
 legend(loc="upper right")
-savefig('03_03.png')
+savefig('03_05.png')
 show()
