@@ -93,7 +93,7 @@ plot(xvalues,yvalues,"b-",label=r'$ g = A / (D + B {(E-C)}^2 )$', alpha=0.5)
 plot(xvalues,yvalues_abc,"g--",label=r'$ g = A / (1 + B {(E-C)}^2 )$', alpha=0.5)
 plot(xvalues,yvalues_poly,"y-",label=r'$ g = A + B x + C x^2 $')
 
-title('Nonlinear Fit of Neutron Scattering Experimental Data \n'+r' with function  $y = A / (D + B {(x-C)}^2 )$')
+title('Nonlinear Fit of Neutron Scattering Experimental Data \n (different functions)')
 ylabel( 'Cross section, '+ r'$g(E_i)$ [mb]')
 xlabel( 'Energy of neutron, $E$ [MeV]   ' + r' Best $\chi^2 \approx $' + str(round(chi2,2)))
 legend(loc="upper right")
