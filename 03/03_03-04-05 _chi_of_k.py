@@ -73,7 +73,7 @@ print(chi2k.shape)
 
 plot(kk, chi2k, label= r'$\chi^2(k)$')
 plot(kk, np.linspace(6.0, 6.0, num=kk.shape[0]), alpha=0.5, label=r'optimum $\chi^2 \approx 6.0 $')
-plot(np.linspace(.463, .463, num=chi2k.shape[0]), chi2k, alpha=0.5, label=r'optimum $k \approx 0.463$')
+plot(np.linspace(.463, .463, num=chi2k.shape[0]), chi2k, alpha=0.5, label=r'optimum $k \approx 0.4624 $')
 title(r'$\chi^2(k)$')
 ylabel( r'$\chi^2$')
 xlabel( r'$k$')

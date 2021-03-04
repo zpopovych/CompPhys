@@ -33,7 +33,7 @@ inputfile.close()
 # print(r)
 
 m = 0
-k = 1.13  # manually adjusted
+k = 0.4624  # manually adjusted
 for line in r:
     print(line)
     s = line.split() # split line and split into list of items(assume items separated by spaces)
@@ -95,7 +95,7 @@ plot(xvalues,yvalues_poly,"y-",label=r'$ g = A + B x + C x^2 $')
 
 title('Nonlinear Fit of Neutron Scattering Experimental Data \n (different functions)')
 ylabel( 'Cross section, '+ r'$g(E_i)$ [mb]')
-xlabel( 'Energy of neutron, $E$ [MeV]   ' + r' Best $\chi^2 \approx $' + str(round(chi2,2)))
+xlabel( 'Energy of neutron, $E$ [MeV].   ' + r' Best $\chi^2 \approx $' + str(round(chi2,2)) + r', best $k \approx 0.4624 $')
 legend(loc="upper right")
 savefig('03_03-04-05.png')
 show()
