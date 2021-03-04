@@ -27,7 +27,7 @@ inputfile.close()
 # print(r)
 
 m = 0
-k = 1.13 # manually adjusted
+k = 0.4624 # manually adjusted
 for line in r:
     print(line)
     s = line.split() # split line and split into list of items(assume items separated by spaces)
@@ -62,7 +62,7 @@ errorbar(xin[0:m],yin[0:m],sig[0:m],fmt="o",label="experiment data")
 plot(xvalues,yvalues,"b-",label=r'$ g = A / (1 + B {(E-C)}^2 )$ fit')
 title('Nonlinear Fit of Neutron Scattering Experimental Data \n'+r' with function  $y = A / (1 + B {(x-C)}^2 )$')
 ylabel( 'Cross section, '+ r'$g(E_i)$ [mb]')
-xlabel( 'Energy of neutron, $E$ [MeV]   ' + r' $\chi^2 \approx $' + str(round(chi2,2)))
+xlabel( 'Energy of neutron, $E$ [MeV].   ' + r' $\chi^2 \approx $' + str(round(chi2,2)) + r', $k \approx $' + str(round(k,2)) )
 legend(loc="upper right")
 savefig('03_04.png')
 show()
