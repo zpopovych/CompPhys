@@ -35,7 +35,7 @@ inputfile.close()
 chi2k = []
 kk = []
 
-for k in np.arange(start=0.1, stop=2., step=0.01):
+for k in np.arange(start=0.3, stop=1.0, step=0.01):
     #print(k, end="")
 
     m = 0
@@ -71,9 +71,13 @@ chi2k=np.array(chi2k)
 print(kk.shape)
 print(chi2k.shape)
 
-plot(kk, chi2k)
+plot(kk, chi2k, label= r'$\chi^2(k)$')
+plot(kk, np.linspace(6.0, 6.0, num=kk.shape[0]), alpha=0.5, label=r'optimum $\chi^2$')
+plot(np.linspace(.463, .463, num=chi2k.shape[0]), chi2k, alpha=0.5, label=r'optimum $k$')
 title(r'$\chi^2(k)$')
 ylabel( r'$\chi^2$')
 xlabel( 'k')
+plt.grid(b=True, which='both')
+legend(loc="upper right")
 savefig('03_chi_of_k.png')
 show()
