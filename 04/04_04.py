@@ -16,14 +16,27 @@ nwalks = 100   # of walks (trials)
 nsteps = 10000   # of stepsfor each walk
 
 ravg=zeros(nsteps)
+ravgt=zeros(nsteps)
 
 for w in range(0,nwalks):   # iterate over trials
     x=0; y=0   # Start at origin
+
     for i in range(0, nsteps):
         x += (random() - 0.5)*2.                        # -1 =< dx =< 1
         y += (random() - 0.5)*2.                        # -1 =< dy =< 1
         r = sqrt(x*x+y*y)   # distance after i steps
-        ravg[i] +=  r    # compute average distance after i steps
+        ravg[i] += r     # compute average distance after i steps
+
+        ravgt[i] += sqrt(i)/sqrt(2)
 
 ravg = ravg / nwalks
+ravgt = ravgt / nwalks
 
+plot(ravg, label='experimental')
+plot(ravgt, label='theoretical', alpha=0.7)
+legend()
+title('Average distance from the origin as a function of N')
+xlabel('N')
+ylabel(r'$r_{avg}$')
+#show()
+savefig('04_04.png')
