@@ -11,6 +11,8 @@
 from pylab import *
 from random import *
 
+from numpy.random import choice
+
 seed(None)                  # Seed generator, None => use system clock
 nwalks = 100   # of walks (trials)
 nsteps = 10000   # of stepsfor each walk
@@ -22,13 +24,18 @@ for w in range(0,nwalks):   # iterate over trials
     x=0; y=0   # Start at origin
 
     for i in range(0, nsteps):
-        x += (random() - 0.5)*2.                        # -1 =< dx =< 1
-        y += (random() - 0.5)*2.                        # -1 =< dy =< 1
+
+        directions = [[0., 1.], [0., -1.], [1., 0.], [-1., 0.]]
+        dir_choice = choice(range(4))
+        dx = directions[dir_choice][0]
+        dy = directions[dir_choice][1]
+
+        x += dx                        # -1 =< dx =< 1
+        y += dy                        # -1 =< dy =< 1
         r = sqrt(x*x+y*y)   # distance after i steps
         ravg[i] += r     # compute average distance after i steps
 
-        #ravgt[i] += sqrt(i)/sqrt(2)
-        ravgt[i] += sqrt(i)*sqrt(1/2)
+        ravgt[i] += sqrt(i)*.9
 
 ravg = ravg / nwalks
 ravgt = ravgt / nwalks
@@ -39,5 +46,5 @@ legend()
 title('Average distance from the origin as a function of N')
 xlabel('N')
 ylabel(r'$r_{avg}$')
-#show()
-savefig('04_04.png')
+show()
+#savefig('04_04_2.png')
