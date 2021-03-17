@@ -33,7 +33,7 @@ theor = np.empty(len(nlist))
 theor.fill(155/6)
 
 error_values = np.abs(values - theor)
-theor_error = 10 - np.array(nlist)/2
+theor_error = 10./np.sqrt(2**np.array(nlist))
 
 figure(figsize=(5,10))
 subplot(2,1,1)
