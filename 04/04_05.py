@@ -48,7 +48,7 @@ ylabel('Value of integral ')
 legend()
 
 subplot(2,1,2)
-plot(nlist, error_values, label='actual error', alpha=0.5)
+plot(nlist, error_values, label='actual error')
 plot(nlist, theor_error, '--', label=r'theoretical error trend $1/\sqrt{N}$', alpha=0.5)
 ylabel('Error ')
 xlabel(r'$log_{2} ( N )$')
