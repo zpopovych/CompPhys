@@ -10,10 +10,12 @@ from pylab import *
 from random import *
 
 N     = 100                                         # number of spins
-J     = 1.                        # Exchange energy (J>0 ferromagnetic)
+J     = 1                        # Exchange energy (J>0 ferromagnetic)
 k     = 1.                                            # Boltmann constant
 T     = 1.                                              # Temperature
 B     = .001
+
+
 
 state = array([+1]*N)                 # spin state: +1 up or -1 (down)
                                     # start with all spins up            
@@ -26,7 +28,7 @@ def energy (S):                                 # Method to calc energy
 
     return -J*sum + np.sum(S)*B
 
-def averages(T):
+def averages(T, A, Bmax):
 
     state = array([+1] * N)  # spin state: +1 up or -1 (down)
     # start with all spins up
@@ -38,9 +40,10 @@ def averages(T):
     M_avg = mag
     E_sq_avg = ES ** 2
 
-    step = 1
+    a = 0
+    b = 0
 
-    for j in range(1, 10000):
+    for j in range(1, (A+Bmax)*100):
         r = int(N * random());  # randomly choose which spin to flip
         state[r] *= -1  # temporarily flip that spin
         #    ET = energy(state)             # finds energy of the test config.
@@ -53,16 +56,24 @@ def averages(T):
         if p < random():  # reject change
             state[r] *= -1  # go back and keep previous energy
         else:
-            step += 1
+            a += 1
             ES = ET  # update energy and magnetization
             mag += deltamag
-            E_avg = (E_avg * (step - 1) + ES) / step
-            M_avg = (M_avg * (step - 1) + mag) / step
-            E_sq_avg = (E_sq_avg * (step - 1) + ES * ES) / step
+            if a > A:
+                b +=1
+                if b > Bmax: break
+                E_avg = (E_avg * (b - 1) + ES) / b
+                M_avg = (M_avg * (b - 1) + mag) / b
+                E_sq_avg = (E_sq_avg * (b - 1) + ES * ES) / b
+            else:
+                E_avg = ES
+                M_avg = mag
+                E_sq_avg = ES ** 2
+
 
     C = (E_sq_avg - E_avg ** 2) / (N * T ** 2)
 
-    return E_avg, M_avg, E_sq_avg, C
+    return E_avg, M_avg, E_sq_avg, C, b
 
 
 E_avg = []
@@ -70,45 +81,61 @@ M_avg = []
 E_sq_avg = []
 C = []
 
+E_avg_r = []
+M_avg_r = []
+E_sq_avg_r = []
+C_r = []
+
 E_theor = []
 M_theor = []
 C_theor = []
 
 
 T = []
+A = 5000
 
-for t in np.arange(0.01, 10., 0.01):
+for t in np.arange(0.01, 5., 0.01):
 
-    E, M, E_sq, c = averages(t)
+    E, M, E_sq, c, b0 = averages(t, A=0, Bmax=1000 )
+    Er, Mr, E_sqr, cr, b = averages(t, A=10000, Bmax=1000 )
 
     E_avg.append(E)
     M_avg.append(M)
     C.append(c)
 
+    E_avg_r.append(Er)
+    M_avg_r.append(Mr)
+    C_r.append(cr)
+
     E_theor.append(-N*J*tanh(J/(k*t)))
     M_theor.append(N*exp(J/k/t)*sinh(B/k/t)/(sqrt(exp(2*J/k/t)*sinh(B/k/t)**2+exp(-2*J/k/t))))
     C_theor.append(((J/(k*t))/cosh(J/(k*t)))**2)
-    #C_theor.append(((1/ t) / cosh(1 / t)) ** 2)
 
     T.append(t)
+
+print('Relaxation of A= %1d steps' % A)
+print('Averaging over B= %1d steps' % b)
 
 
 figure(figsize=(5,8))
 subplot(3,1,1)
-plot(T, E_avg)
+plot(T, E_avg, alpha=.7)
+plot(T, E_avg_r, alpha=.7)
 plot(T, E_theor)
 title(r'Everage energy $\langle E \rangle$')
 subplot(3,1,2)
-plot(T, M_avg)
+plot(T, M_avg, alpha=.7)
+plot(T, M_avg_r, alpha=.7)
 plot(T, M_theor)
 title(r'Everage magnetization $\mathcal{M}$')
 subplot(3,1,3)
-plot(T, C, label='simulation')
+plot(T, C, label='sim w/o relax', alpha=.7)
+plot(T, C_r, label='sim w relax A='+str(A), alpha=.7)
 plot(T, C_theor, label='theoretical')
 title(r'Specific heat $C = \frac{\langle E^2 \rangle - \langle E \rangle}{N T^2}$')
 xlabel(r'Temperature, $T$')
 ylim(0,1)
 legend(loc='center right')
 tight_layout()
-savefig('05_04.png')
+savefig('05_04AB.png')
 show()
