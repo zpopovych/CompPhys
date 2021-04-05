@@ -8,6 +8,7 @@
 
 from pylab import *
 from random import *
+from scipy.optimize import curve_fit
 
 N     = 100                                         # number of spins
 J     = 1                        # Exchange energy (J>0 ferromagnetic)
@@ -75,6 +76,9 @@ def averages(T, A, Bmax):
 
     return E_avg, M_avg, E_sq_avg, C, b
 
+def spec_heat_func(t, J, k):
+    return ((J / (k * t)) / cosh(J / (k * t))) ** 2
+
 
 E_avg = []
 M_avg = []
@@ -92,17 +96,17 @@ C_theor = []
 
 
 T = []
-Amax = 1000
-Bmax = 1000
+Amax = 30
+Bmax = 100
 
 for t in np.arange(0.01, 5., 0.01):
 
-    E, M, E_sq, c, b0 = averages(t, A=0, Bmax=Bmax )
+    #E, M, E_sq, c, b0 = averages(t, A=0, Bmax=Bmax )
     Er, Mr, E_sqr, cr, b = averages(t, A=Amax, Bmax=Bmax )
 
-    E_avg.append(E)
-    M_avg.append(M)
-    C.append(c)
+    #E_avg.append(E)
+    #M_avg.append(M)
+    #C.append(c)
 
     E_avg_r.append(Er)
     M_avg_r.append(Mr)
@@ -110,36 +114,23 @@ for t in np.arange(0.01, 5., 0.01):
 
     E_theor.append(-N*J*tanh(J/(k*t)))
     M_theor.append(N*exp(J/k/t)*sinh(B/k/t)/(sqrt(exp(2*J/k/t)*sinh(B/k/t)**2+exp(-2*J/k/t))))
-    C_theor.append(((J/(k*t))/cosh(J/(k*t)))**2)
+    C_theor.append(spec_heat_func(t, J, k))
 
     T.append(t)
 
 print('Relaxation of A= %1d steps' % Amax)
 print('Averaging over B= %1d steps' % b)
 
-Cz = polyfit(T, C_r, 8)
-Cp = np.poly1d(Cz)
+popt, pcov = curve_fit(spec_heat_func, T, C_r)
+C_trend = spec_heat_func(np.array(T), *popt)
 
-figure(figsize=(5,8))
-subplot(3,1,1)
-plot(T, E_avg, alpha=.7)
-plot(T, E_avg_r, alpha=.7, color='brown')
-plot(T, E_theor)
-title(r'Everage energy $\langle E \rangle$')
-subplot(3,1,2)
-plot(T, M_avg, alpha=.7)
-plot(T, M_avg_r, alpha=.7)
-plot(T, M_theor)
-title(r'Everage magnetization $\mathcal{M}$')
-subplot(3,1,3)
-plot(T, C, label='sim w/o relax', alpha=.7)
 plot(T, C_r, label='sim w relax A='+str(Amax), alpha=.7)
-plot(T, Cp(T), label='C trend', alpha=.7)
+plot(T, C_trend, label='trend', alpha=.7)
 plot(T, C_theor, label='theoretical')
 title(r'Specific heat $C = \frac{\langle E^2 \rangle - \langle E \rangle}{N T^2}$')
 xlabel(r'Temperature, $T$')
 ylim(0,1)
 legend(loc='center right')
 tight_layout()
-savefig('05_04A'+str(Amax)+'.png')
+savefig('05_04_C_A'+str(Amax)+'.png')
 show()
