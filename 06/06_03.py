@@ -18,21 +18,9 @@ k2 = zeros(2, float);   k3 = zeros((2), float)
 k4 = zeros((2), float)
 
 def f( t, y):      # Force function: component 0 is position, component 1 is velocity
-    fReturn[0] = y[1]       # dx/dt  = v                                     
-    fReturn[1] = -y[0]       # dv/dt = -x
-    return fReturn
-
-def pendulum_f( t, y):      # Force function: component 0 is position, component 1 is velocity
-    g = 1; L = 1
     fReturn[0] = y[1]       # d theta/dt  = omega
-    fReturn[1] = - (g/L) * sin(y[0])     # d omega/dt = - (g/L) * sin (theta)
+    fReturn[1] = - sin(y[0])     # d omega/dt = - (g/L) * sin (theta)
     return fReturn
-
-
-def energ(v,x):
-    k=1
-    m=1
-    return (m*v**2 + k * x**2)/2
 
 
 def rk4(t,h,n):          # take one 4th order RK step          
@@ -50,62 +38,52 @@ def rk4(t,h,n):          # take one 4th order RK step
     ynew = y + (k1 + 2*(k2 + k3) + k4)/6
     return ynew   
 
-a = 0.     # evolve from time a to time b in n steps
-b = 70.
-n = 1000
-t = a;       h = (b-a)/n;
+thetas = []
+periods = []
+theor_periods = []
 
-y[0] = 1;   y[1] = 0    #initialize position and velocity
+for theta in np.arange(0.1, pi-0.1, 0.01):
 
-time = []
-position = []
-theor_pos = []
-velocity = []
-theor_vel = []
-energy = []
-roots = []
+    a = 0.  # evolve from time a to time b in n steps
+    b = 100.
+    n = 150
+    t = a
+    h = (b - a) / n
 
-pre_x = 0
+    y[0] = theta
+    y[1] = 0  # initialize position and velocity
 
-while (t < b):                                              # Time loop
-    if ((t + h) > b):
-        h = b - t                                           # Last step
-    y = rk4(t,h,2)
-    t = t + h
+    time = []
+    position = []
 
-    # Problem 1: Prepare lists of positions, velocities, energy and time
-    x = y[0]
-    v = y[1]
-    position.append(x)
-    theor_pos.append(sin(pi/2+t))
-    velocity.append(v)
-    theor_vel.append(sin(pi+t))
-    energy.append(energ(v,x))
-    time.append(t)
+    roots = []
+    pre_x = 0
 
-    # Problem 2: find roots of position function to evaluate period
-    if len(position)>1: pre_x = position[-2]
-    if x*pre_x <0: roots.append( (x*t - pre_x *(t-h))/(x-pre_x))
+    while (t < b):  # Time loop
+        if ((t + h) > b):
+            h = b - t  # Last step
+        y = rk4(t, h, 2)
+        t = t + h
 
-# Problem 1: Plot dynamics of position and energy
-subplot(211)
-tight_layout(pad=2.0)
-title(r'Energy $E = \frac{m v^2}{2} + \frac{k x^2}{2}$')
-plot(time, energy)
-ylim(.45, .55)
-subplot(212)
-title('Position dynamics')
-plot(time, position, label='rk4' )
-plot(time, theor_pos, '--', label='analitical', alpha=.5)
-legend(loc='right')
-savefig('06_01.png')
+        # Problem 1: Prepare lists of positions, velocities, energy and time
+        x = y[0]
+        v = y[1]
+        position.append(x)
+        time.append(t)
+
+        # Problem 2: find roots of position function to evaluate period
+        if len(position) > 1: pre_x = position[-2]
+        if x * pre_x < 0: roots.append((x * t - pre_x * (t - h)) / (x - pre_x))
+    thetas.append(theta)
+    periods.append(2*average(np.diff(roots)))
+    theor_periods.append( 2*pi*( 1 + (1/4)*(sin(theta/2))**2 + (9/64)*(sin(theta/2))**4) )
+
+plot(thetas, periods, label='rk4', alpha=.5)
+plot(thetas, theor_periods, label='analytical 4-th order', alpha=.5)
+axhline(y=2*pi, linewidth=1, label='harmonic oscillator', alpha=.5, c ='green')
+title('Period of pendulum oscillations ')
+xlabel(r'Initial angle, $\theta$')
+ylabel(r'Period, $T$')
+legend()
+savefig('06_03.png')
 show()
-
-
-# Problem 2: caclulate average period
-periods = np.diff(roots)
-T = average(periods)
-print('Average period:', T)
-    
-print('Final positions:', y)   #print out final position and velocity
-                                

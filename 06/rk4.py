@@ -9,8 +9,7 @@
 # rk4.py 4th order Runge Kutta
 
 
-from pylab import *
-import numpy as np
+from pylab import *		 
 
 ydumb = zeros(2);       y = zeros(2)
 fReturn = zeros(2);     k1 = zeros(2, float)
@@ -21,11 +20,6 @@ def f( t, y):      # Force function: component 0 is position, component 1 is vel
     fReturn[0] = y[1]       # dx/dt  = v                                     
     fReturn[1] = -y[0]      # dv/dt = -x   
     return fReturn
-
-def energ(v,x):
-    k=1
-    m=1
-    return (m*v**2 + k * x**2)/2
 
 
 def rk4(t,h,n):          # take one 4th order RK step          
@@ -44,57 +38,18 @@ def rk4(t,h,n):          # take one 4th order RK step
     return ynew   
 
 a = 0.     # evolve from time a to time b in n steps
-b = 70.
-n = 100000
+b = 10.
+n = 100
 t = a;       h = (b-a)/n;
 
 y[0] = 1;   y[1] = 0    #initialize position and velocity
-
-time = []
-position = []
-velocity = []
-energy = []
-roots = []
-
-pre_x = 0
+ 
 
 while (t < b):                                              # Time loop
     if ((t + h) > b):
         h = b - t                                           # Last step
     y = rk4(t,h,2)
     t = t + h
-
-    # Problem 1: Prepare lists of positions, velocities, energy and time
-    x = y[0]
-    v = y[1]
-    position.append(x)
-    velocity.append(v)
-    energy.append(energ(v,x))
-    time.append(t)
-
-    # Problem 2: find roots of position function to evaluate period
-    if len(position)>1: pre_x = position[-2]
-    if x*pre_x <0: roots.append( (x*t - pre_x *(t-h))/(x-pre_x))
-
-# Problem 1: Plot dynamics of position and energy
-subplot(211)
-tight_layout(pad=3.0)
-title(r'Energy $E = \frac{m v^2}{2} + \frac{k x^2}{2}$')
-plot(time, energy)
-ylim(.45, .55)
-subplot(212)
-tight_layout(pad=3.0)
-title('Velocity and position dynamics')
-plot(time, position, label='position')
-plot(time, velocity, label='velocity')
-legend(loc='right')
-savefig('06_01.png')
-show()
-
-# Problem 2: caclulate average period
-periods = np.diff(roots)
-T = average(periods)
-print('Average period:', T)
     
-print('Final positions:', y)   #print out final position and velocity
+print(y)   #print out final position and velocity
                                 

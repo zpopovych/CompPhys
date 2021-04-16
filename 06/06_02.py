@@ -51,8 +51,8 @@ def rk4(t,h,n):          # take one 4th order RK step
     return ynew   
 
 a = 0.     # evolve from time a to time b in n steps
-b = 70.
-n = 1000
+b = 65.
+n = 200
 t = a;       h = (b-a)/n;
 
 y[0] = 1;   y[1] = 0    #initialize position and velocity
@@ -63,7 +63,9 @@ theor_pos = []
 velocity = []
 theor_vel = []
 energy = []
+theor_energy = []
 roots = []
+
 
 pre_x = 0
 
@@ -81,6 +83,7 @@ while (t < b):                                              # Time loop
     velocity.append(v)
     theor_vel.append(sin(pi+t))
     energy.append(energ(v,x))
+    theor_energy.append(.5)
     time.append(t)
 
     # Problem 2: find roots of position function to evaluate period
@@ -88,17 +91,34 @@ while (t < b):                                              # Time loop
     if x*pre_x <0: roots.append( (x*t - pre_x *(t-h))/(x-pre_x))
 
 # Problem 1: Plot dynamics of position and energy
+figure(figsize=(8,3))
 subplot(211)
 tight_layout(pad=2.0)
 title(r'Energy $E = \frac{m v^2}{2} + \frac{k x^2}{2}$')
-plot(time, energy)
-ylim(.45, .55)
+plot(time, energy, '--', label='rk4' )
+plot(time, theor_energy, label='analitical', alpha=.5)
+legend(loc='lower right')
+ylim(.49, .51)
 subplot(212)
 title('Position dynamics')
-plot(time, position, label='rk4' )
-plot(time, theor_pos, '--', label='analitical', alpha=.5)
-legend(loc='right')
-savefig('06_01.png')
+plot(time, position, '--')
+plot(time, theor_pos, alpha=.5)
+axhline(linewidth=1, c='black')
+axvline(x=pi/2, c='green', alpha=.5)
+axvline(x=3*pi/2, c='green', alpha=.5)
+axvline(x=2*pi+pi/2, c ='green', alpha=.5, label='roots')
+axvline(x=3*pi+pi/2, c ='green', alpha=.5)
+axvline(x=4*pi+pi/2, c ='green', alpha=.5)
+axvline(x=5*pi+pi/2, c ='green', alpha=.5)
+axvline(x=6*pi+pi/2, c ='green', alpha=.5)
+axvline(x=7*pi+pi/2, c ='green', alpha=.5)
+axvline(x=8*pi+pi/2, c ='green', alpha=.5)
+legend(loc='lower right')
+locs, labels = xticks()
+locs = np.arange(0, 60, step=pi)
+labels = [ str(n)+r'$\pi$' for n in range(0, int(60/pi)+1) ]
+xticks(locs, labels)
+savefig('06_02.png')
 show()
 
 
