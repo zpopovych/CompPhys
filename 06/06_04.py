@@ -45,11 +45,11 @@ amps = []
 
 theta0 = 0.1
 
-for omega_dr in np.arange(0.01, 10, 0.001):
+for omega_dr in np.arange(0, 2, 0.001):
 
     a = 0.  # evolve from time a to time b in n steps
     b = 100.
-    n = 100
+    n = 200
     t = a
     h = (b - a) / n
 
@@ -74,6 +74,7 @@ for omega_dr in np.arange(0.01, 10, 0.001):
     amps.append(amp)
 
 plot(drives, amps, alpha=.5)
+axvline(x=1, linestyle ='--', c='green', alpha=.5)
 title('Amplitudes of drived pendulum oscillations ')
 xlabel(r'Driving frequency, $\omega_{dr}$')
 ylabel(r'Amplitude (maximum value of position)')
