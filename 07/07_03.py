@@ -63,7 +63,7 @@ for E_i in np.arange(24.01, 27.0, 0.1):
     I.append(Ic)
 
 plot(E0, I)
-title('Number of iterations')
+title('Convergence of Newton-Raphson algorithm')
 xlabel(r'Starting point $E_0$')
 ylabel('Number of iterations')
 savefig('07_03.png')
