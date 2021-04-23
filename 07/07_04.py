@@ -38,10 +38,11 @@ def newton(x):
     dx = 1e-14
     while abs(f(x)) > eps:
         df = (f(x + dx/2) - f(x - dx/2))/ dx
-        if df > 1e-8: dx = - f(x)/df
+        if (df < 1e-12) or (df > 1e9): break
+        dx = - f(x)/df
         x += dx
         counter+=1
-        if counter > 100: break
+        if counter > 1000: break
     #print('Number of iterrations:', counter)
     return x
 
@@ -50,22 +51,28 @@ epsilon = 1e-8
 
 V=[]
 E = []
-V_2_list = np.arange(70., 10000., .1)
 
-for V2 in V_2_list:
-    print(V2)
+E0 = 27.20075187724861
+for V2 in np.geomspace(70., 10000., 10):
     V.append(V2)
-    E_candidte = newton(25.)
-    if (E_candidte < V2) and (E_candidte > V1):
-        E.append(E_candidte)
+    E.append(E0)
+    E0 = newton(E0)
+""" E.append(E0)
+    Enew = newton(E[-1])
+    if (Enew < 33) and (Enew > V1):
+        E.append(Enew)
     else:
-        E.append(E[-1])
-    #E.append(newton(V1+(V2-V1)/5))
+        E.append(E0)
+"""
 
-loglog(V, E)
+semilogx(V, E, label = 'newton')
+hlines(V1+(3*pi/2)**2, 20, 1e4, color='orange', label='asymptotic')
 title('Energy dependence on the depth of the well')
 xlabel(r'Potential $V_2$')
 ylabel(r'Energy $E_2$')
+ylim(26, 33)
+xlim(50, 1e4)
+legend(loc='center right')
 savefig('07_04.png')
 show()
 
